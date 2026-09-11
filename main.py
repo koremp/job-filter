@@ -8,7 +8,7 @@ crawlers/ 아래 스텁을 확인하고 하나씩 채워나갈 것.
 import config
 from crawlers import saramin
 from filters import education
-from storage import csv_writer
+from storage import csv_writer, json_writer
 
 
 def run_saramin_pipeline():
@@ -26,6 +26,7 @@ def run_saramin_pipeline():
     verified = education.verify_jobs(all_candidates)
 
     csv_writer.save_to_csv(verified, "saramin_high_school_eligible_jobs.csv")
+    json_writer.save_to_json(verified, "jobs.json")
 
     eligible_count = sum(1 for j in verified if j["actually_eligible"])
     print(f"\n최종 결과: 전체 {len(verified)}건 중 실제 지원 가능 {eligible_count}건")

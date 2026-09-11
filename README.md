@@ -4,6 +4,14 @@
 고졸 지원이 실제로 가능한 공고만 걸러내고, 잡플래닛 평점을
 함께 정리하는 것을 목표로 하는 프로젝트입니다.
 
+## 웹사이트
+
+**https://koremp.github.io/job-filter/**
+
+매일 GitHub Actions가 자동으로 크롤링을 실행하고, 결과를 위 페이지에
+배포합니다. 회사명/제목 검색과 "실제 지원 가능만 보기" 필터를
+지원합니다.
+
 ## 진행 상태
 
 | 사이트 | 상태 | 방식 |
@@ -52,7 +60,25 @@ access-key는 https://oapi.saramin.co.kr 에서 이용신청 후
 python main.py
 ```
 
-결과는 `data/saramin_high_school_eligible_jobs.csv`에 저장됩니다.
+결과는 `data/saramin_high_school_eligible_jobs.csv`와
+`data/jobs.json`(웹사이트용)에 저장됩니다.
+
+## 웹사이트 배포 (GitHub Actions + GitHub Pages)
+
+`.github/workflows/deploy.yml`이 매일 06:00(KST)에 자동으로:
+
+1. `python main.py` 실행 (크롤링 + 검증 → `data/jobs.json` 생성)
+2. `site/`(정적 페이지) + `data/jobs.json`을 묶어 GitHub Pages에 배포
+
+**최초 1회 설정이 필요합니다** — 저장소 Settings → Secrets and
+variables → Actions에서 아래 값을 등록하세요 (이 값들은 저장소에
+커밋되지 않고 GitHub Secrets에만 저장됩니다):
+
+- `SARAMIN_ACCESS_KEY` (필수)
+- `OPENAI_API_KEY` (선택, 3차 LLM 검증을 쓰려면)
+
+Actions 탭에서 "크롤링 & 사이트 배포" 워크플로를 수동 실행
+(workflow_dispatch)해서 바로 테스트해볼 수도 있습니다.
 
 ## 폴더 구조
 
@@ -69,8 +95,15 @@ python main.py
 ├── filters/
 │   ├── education.py         # 2차 학력 검증 필터 (키워드 매칭)
 │   └── llm_verify.py        # 3차 LLM 보조 검증 (선택, OPENAI_API_KEY 필요)
-└── storage/
-    └── csv_writer.py        # CSV 저장
+├── storage/
+│   ├── csv_writer.py        # CSV 저장
+│   └── json_writer.py       # 웹사이트용 JSON 저장
+├── site/                   # 정적 웹사이트 (GitHub Pages로 배포)
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
+└── .github/workflows/
+    └── deploy.yml           # 매일 크롤링 + 사이트 자동 배포
 ```
 
 ## 법적/약관 관련 주의사항

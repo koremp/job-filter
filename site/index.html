@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>프론트엔드 고졸 채용공고</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="page-header">
+    <h1>프론트엔드 신입 · 고졸 채용공고</h1>
+    <p class="subtitle">사람인 Open API로 수집 후, 실제 고졸 지원 가능 여부를 재검증한 목록입니다.</p>
+    <div class="meta" id="meta">데이터를 불러오는 중...</div>
+  </header>
+
+  <main>
+    <div class="controls">
+      <input type="search" id="search" placeholder="회사명 또는 제목 검색" />
+      <label class="toggle">
+        <input type="checkbox" id="eligible-only" checked />
+        실제 지원 가능한 공고만 보기
+      </label>
+    </div>
+
+    <div id="status" class="status" hidden></div>
+
+    <div class="table-wrap">
+      <table id="job-table">
+        <thead>
+          <tr>
+            <th>제목</th>
+            <th>회사</th>
+            <th>지역</th>
+            <th>학력</th>
+            <th>급여</th>
+            <th>게시일</th>
+            <th>지원 가능</th>
+          </tr>
+        </thead>
+        <tbody id="job-table-body"></tbody>
+      </table>
+    </div>
+
+    <p id="empty" class="empty" hidden>조건에 맞는 공고가 없습니다.</p>
+  </main>
+
+  <footer class="page-footer">
+    <a href="https://github.com/koremp/job-filter" target="_blank" rel="noopener">GitHub 저장소</a>
+    · 매일 자동으로 갱신됩니다
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
